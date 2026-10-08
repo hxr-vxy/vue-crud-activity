@@ -4,49 +4,49 @@ import Queue from './components/Queue.vue'
 
 const queue = ref([])
 
-const newTodo = ref('')
+const newQueue = ref('')
 
 function addQueue() {
-  if (newTodo.value.trim() === '') {
+  if (newQueue.value.trim() === '') {
     return
   }
 
   queue.value.push({
     id: Date.now(),
-    title: newTodo.value,
+    title: newQueue.value,
     completed: false
   })
 
-  newTodo.value = ''
+  newQueue.value = ''
 
-  saveTodos()
+  save()
 }
 
 function deleteQueue(id) {
-  queue.value = queue.value.filter(todo => todo.id !== id)
+  queue.value = queue.value.filter(queue => queue.id !== id)
 
-  saveTodos()
+  save()
 }
 
 function updateQueue(updatedQueue) {
-  const index = queue.value.findIndex(todo => todo.id === updatedQueue.id)
+  const index = queue.value.findIndex(queue => queue.id === updatedQueue.id)
 
   if (index !== -1) {
     queue.value[index] = updatedQueue
   }
 
-  saveTodos()
+  save()
 }
 
-function saveTodos() {
-  localStorage.setItem('todos', JSON.stringify(queue.value))
+function save() {
+  localStorage.setItem('queues', JSON.stringify(queue.value))
 }
 
 onMounted(() => {
-  const savedTodos = localStorage.getItem('todos')
+  const savedQueues = localStorage.getItem('queues')
 
-  if (savedTodos) {
-    queue.value = JSON.parse(savedTodos)
+  if (savedQueues) {
+    queue.value = JSON.parse(savedQueues)
   }
 })
 </script>
@@ -59,7 +59,7 @@ onMounted(() => {
     <!-- Add Queue -->
     <div class="add-queue">
       <input
-        v-model="newTodo"
+        v-model="newQueue"
         type="text"
         placeholder="Enter your name"
         @keyup.enter="addQueue"
@@ -70,8 +70,8 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Todo List -->
-    <div class="todo-list">
+    <!-- Queue List -->
+    <div class="queue-list">
 
       <Queue
         v-for="queueItem in queue"
